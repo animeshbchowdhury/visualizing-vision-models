@@ -10,7 +10,7 @@ import torch.optim as optim
 from torch.optim import lr_scheduler
 import torch.backends.cudnn as cudnn
 import numpy as np
-from metrics import HSIC
+from metrics import HSIC, MinusRbfHSIC
 
 
 def getActivation(name,hookLayersActivationDict):
@@ -52,7 +52,6 @@ def accuracy(output, target, topk=(1,)):
     return res
 
 def evaluate(model,device,dataloader,hookLayerList,hookLayersActivationDict):
-    losses = AverageMeter()
     top1 = AverageMeter()
     # switch to evaluate mode
     model.eval()
@@ -60,7 +59,6 @@ def evaluate(model,device,dataloader,hookLayerList,hookLayersActivationDict):
     for item in hookLayerList:
         activationDict[item] = []
 
-    end = time.time()
     with torch.no_grad():
         for _, (data, target) in enumerate(tqdm(dataloader, desc="Iteration",file=sys.stdout)):
             target = target.to(device)
@@ -77,19 +75,25 @@ def evaluate(model,device,dataloader,hookLayerList,hookLayersActivationDict):
                 activationDict[i].append(hookLayersActivationDict[i])
             break
 
-    return losses.avg,top1.avg,activationDict
+    return top1.avg,activationDict
 
-def getOutputCorrelation(hookLayersM1,hookLayersM2,activationDictM1,activationDictM2):
+def getLayerWiseOutputCorrelation(hookLayersM1,hookLayersM2,activationDictM1,activationDictM2):
     col1 = []
     col2 = []
     hsicScoreList = []
+    hsicObj = MinusRbfHSIC(sigma_x=1)
     for layer1 in hookLayersM1:
         for layer2 in hookLayersM2:
+            #oaL1 = torch.flatten(activationDictM1[layer1][0])#activationDictM1[layer1][0].reshape(activationDictM1[layer1][0].size(0),-1)
+            #oaL2 = torch.flatten(activationDictM2[layer2][0])#activationDictM2[layer2][0].reshape(activationDictM2[layer2][0].size(0),-1)
             oaL1 = activationDictM1[layer1][0].reshape(activationDictM1[layer1][0].size(0),-1)
             oaL2 = activationDictM2[layer2][0].reshape(activationDictM2[layer2][0].size(0),-1)
             hsicCross = HSIC(oaL1,oaL2).detach().item()
             hsicL1 = HSIC(oaL1,oaL1).detach().item()
             hsicL2 = HSIC(oaL2,oaL2).detach().item()
+            # hsicCross = hsicObj(oaL1,oaL2).detach().item()
+            # hsicL1 = hsicObj(oaL1,oaL1).detach().item()
+            # hsicL2 = hsicObj(oaL2,oaL2).detach().item()
             denom=np.sqrt(hsicL1*hsicL2)
             if np.isnan(hsicL1) or np.isnan(hsicL2) or np.isnan(hsicCross) or denom == 0:
                 print("Layer 1:"+layer1+", HSIC score:"+str(hsicL1))

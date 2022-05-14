@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from lambda_layer import LambdaLayer
 
 __all__ = [
     "ResNet",
@@ -112,6 +113,7 @@ class Bottleneck(nn.Module):
         self.bn1 = norm_layer(width)
         self.relu1 = nn.ReLU(inplace=True)
         self.conv2 = conv3x3(width, width, stride, dilation)
+        #self.conv2 = LambdaLayer(width, m=size, stride=stride)
         self.bn2 = norm_layer(width)
         self.relu2 = nn.ReLU(inplace=True)
         self.conv3 = conv1x1(width, planes * self.expansion)
@@ -319,13 +321,13 @@ def resnet50(
     )
 
 
-def resnet101(pretrained=False, progress=True, **kwargs):
+def resnet101(num_classes,pretrained=False, progress=True, **kwargs):
     return _resnet(
-        "resnet101", Bottleneck, [3, 4, 23, 3], pretrained, progress, **kwargs
+        "resnet101", Bottleneck, [3, 4, 23, 3], num_classes,pretrained, progress, **kwargs
     )
 
 
-def resnet152(pretrained=False, progress=True, **kwargs):
+def resnet152(num_classes,pretrained=False, progress=True, **kwargs):
     return _resnet(
-        "resnet152", Bottleneck, [3, 8, 36, 3], pretrained, progress, **kwargs
+        "resnet152", Bottleneck, [3, 8, 36, 3],num_classes, pretrained, progress, **kwargs
     )
