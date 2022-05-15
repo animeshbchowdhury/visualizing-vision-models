@@ -1,1 +1,1 @@
-# visualizing-vision-models
+# Visualizing vision models: From CNNs to ViT
