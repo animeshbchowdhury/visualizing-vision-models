@@ -13,6 +13,7 @@ __all__ = [
     "resnext101_32x8d",
     "wide_resnet50_2",
     "wide_resnet101_2",
+    "lambda_resnet50"
 ]
 
 
@@ -43,7 +44,9 @@ class BasicBlock(nn.Module):
         self,
         inplanes,
         planes,
-        stride,
+        size,
+        enable_lambda=False,
+        stride=1,
         downsample=None,
         base_width=64,
         dilation=1,
@@ -98,6 +101,8 @@ class Bottleneck(nn.Module):
         self,
         inplanes,
         planes,
+        size,
+        enable_lambda=False,
         stride=1,
         downsample=None,
         base_width=64,
@@ -112,8 +117,10 @@ class Bottleneck(nn.Module):
         self.conv1 = conv1x1(inplanes, width)
         self.bn1 = norm_layer(width)
         self.relu1 = nn.ReLU(inplace=True)
-        self.conv2 = conv3x3(width, width, stride, dilation)
-        #self.conv2 = LambdaLayer(width, m=size, stride=stride)
+        if enable_lambda:
+            self.conv2 = LambdaLayer(width, m=size, stride=stride)
+        else:
+            self.conv2 = conv3x3(width, width, stride, dilation)
         self.bn2 = norm_layer(width)
         self.relu2 = nn.ReLU(inplace=True)
         self.conv3 = conv1x1(width, planes * self.expansion)
@@ -151,6 +158,7 @@ class ResNet(nn.Module):
         block,
         layers,
         num_classes,
+        enable_lambda,
         zero_init_residual=False,
         width_per_group=64,
         replace_stride_with_dilation=None,
@@ -179,16 +187,10 @@ class ResNet(nn.Module):
         self.bn1 = norm_layer(self.inplanes)
         self.relu = nn.ReLU(inplace=True)
         # self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
-        self.layer1 = self._make_layer(block, 64, layers[0])
-        self.layer2 = self._make_layer(
-            block, 128, layers[1], stride=2, dilate=replace_stride_with_dilation[0]
-        )
-        self.layer3 = self._make_layer(
-            block, 256, layers[2], stride=2, dilate=replace_stride_with_dilation[1]
-        )
-        self.layer4 = self._make_layer(
-            block, 512, layers[3], stride=2, dilate=replace_stride_with_dilation[2]
-        )
+        self.layer1 = self._make_layer(block, 64, layers[0],size=32,enable_lambda=enable_lambda)
+        self.layer2 = self._make_layer(block, 128, layers[1],size=16,enable_lambda=enable_lambda,stride=2, dilate=replace_stride_with_dilation[0])
+        self.layer3 = self._make_layer(block, 256, layers[2],size=8,enable_lambda=enable_lambda,stride=2, dilate=replace_stride_with_dilation[1])
+        self.layer4 = self._make_layer(block, 512, layers[3],size=4,enable_lambda=enable_lambda,stride=2, dilate=replace_stride_with_dilation[2])
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(512 * block.expansion, num_classes)
 
@@ -206,7 +208,7 @@ class ResNet(nn.Module):
                 elif isinstance(m, BasicBlock):
                     nn.init.constant_(m.bn2.weight, 0)
 
-    def _make_layer(self, block, planes, blocks, stride=1, dilate=False):
+    def _make_layer(self, block, planes,blocks,size,enable_lambda=False,stride=1, dilate=False):
         norm_layer = self._norm_layer
         downsample = None
         previous_dilation = self.dilation
@@ -224,6 +226,8 @@ class ResNet(nn.Module):
             block(
                 self.inplanes,
                 planes,
+                size,
+                enable_lambda,
                 stride,
                 downsample,
                 self.base_width,
@@ -237,6 +241,8 @@ class ResNet(nn.Module):
                 block(
                     self.inplanes,
                     planes,
+                    size,
+                    enable_lambda,
                     stride=1,
                     downsample=None,
                     base_width=self.base_width,
@@ -272,16 +278,17 @@ def _resnet(
     block,
     layers,
     num_classes,
+    enable_lambda,
     pretrained,
     progress,
     **kwargs
 ):
-    model = ResNet(block, layers, num_classes, **kwargs)
+    model = ResNet(block, layers, num_classes,enable_lambda,**kwargs)
     return model
 
 
 def resnet18(
-    num_classes, pretrained=False, progress=True, **kwargs
+    num_classes, enable_lambda=False,pretrained=False, progress=True, **kwargs
 ):
     
     return _resnet(
@@ -289,18 +296,20 @@ def resnet18(
         BasicBlock,
         [2, 2, 2, 2],
         num_classes,
+        enable_lambda,
         pretrained,
         progress,
         **kwargs
     )
 
 
-def resnet34(num_classes, pretrained=False, progress=True, **kwargs):
+def resnet34(num_classes,enable_lambda=False,pretrained=False, progress=True, **kwargs):
     return _resnet(
         "resnet34",
         BasicBlock,
         [3, 4, 6, 3],
         num_classes,
+        enable_lambda,
         pretrained,
         progress,
         **kwargs
@@ -308,26 +317,41 @@ def resnet34(num_classes, pretrained=False, progress=True, **kwargs):
 
 
 def resnet50(
-    num_classes, pretrained=False, progress=True, **kwargs
+    num_classes,enable_lambda=False,pretrained=False, progress=True, **kwargs
 ):
     return _resnet(
         "resnet50",
         Bottleneck,
         [3, 4, 6, 3],
         num_classes,
+        enable_lambda,
+        pretrained,
+        progress,
+        **kwargs
+    )
+    
+def lambda_resnet50(
+    num_classes,enable_lambda=True,pretrained=False, progress=True, **kwargs
+):
+    return _resnet(
+        "resnet50",
+        Bottleneck,
+        [3, 4, 6, 3],
+        num_classes,
+        enable_lambda,
         pretrained,
         progress,
         **kwargs
     )
 
 
-def resnet101(num_classes,pretrained=False, progress=True, **kwargs):
+def resnet101(num_classes,enable_lambda=False,pretrained=False, progress=True, **kwargs):
     return _resnet(
-        "resnet101", Bottleneck, [3, 4, 23, 3], num_classes,pretrained, progress, **kwargs
+        "resnet101", Bottleneck, [3, 4, 23, 3], num_classes,enable_lambda,pretrained, progress, **kwargs
     )
 
 
-def resnet152(num_classes,pretrained=False, progress=True, **kwargs):
+def resnet152(num_classes,enable_lambda=False,pretrained=False, progress=True, **kwargs):
     return _resnet(
-        "resnet152", Bottleneck, [3, 8, 36, 3],num_classes, pretrained, progress, **kwargs
+        "resnet152", Bottleneck, [3, 8, 36, 3],num_classes, enable_lambda,pretrained,progress, **kwargs
     )
