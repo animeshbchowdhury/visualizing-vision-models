@@ -114,7 +114,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 if MODEL_NAME == "resnet18":
     model = resnet18(num_classes=100)
-elif MODEL_NAME == "resnet18":
+elif MODEL_NAME == "resnet34":
     model = resnet34(num_classes=100)
 elif MODEL_NAME == "resnet50":
     model = resnet50(num_classes=100)
