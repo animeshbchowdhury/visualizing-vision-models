@@ -13,7 +13,9 @@ __all__ = [
     "resnext101_32x8d",
     "wide_resnet50_2",
     "wide_resnet101_2",
-    "lambda_resnet50"
+    "lambda_resnet50",
+    "lambda_resnet38",
+    "lambda_resnet26"
 ]
 
 
@@ -329,12 +331,40 @@ def resnet50(
         progress,
         **kwargs
     )
+
+def lambda_resnet26(
+    num_classes,enable_lambda=True,pretrained=False, progress=True, **kwargs
+):
+    return _resnet(
+        "lambda_resnet26",
+        Bottleneck,
+        [2, 2, 2, 2],
+        num_classes,
+        enable_lambda,
+        pretrained,
+        progress,
+        **kwargs
+    )
     
+def lambda_resnet38(
+    num_classes,enable_lambda=True,pretrained=False, progress=True, **kwargs
+):
+    return _resnet(
+        "lambda_resnet38",
+        Bottleneck,
+        [2, 3, 5, 2],
+        num_classes,
+        enable_lambda,
+        pretrained,
+        progress,
+        **kwargs
+    )
+
 def lambda_resnet50(
     num_classes,enable_lambda=True,pretrained=False, progress=True, **kwargs
 ):
     return _resnet(
-        "resnet50",
+        "lambda_resnet50",
         Bottleneck,
         [3, 4, 6, 3],
         num_classes,

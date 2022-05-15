@@ -14,7 +14,7 @@ import copy
 import sys
 from tqdm import tqdm
 from utils import AverageMeter,accuracy
-from resnet import resnet18,resnet34,resnet50,lambda_resnet50
+from resnet import resnet18,resnet34,resnet50,lambda_resnet50,lambda_resnet26,lambda_resnet38
 
 
 MODEL_NAME = sys.argv[1]
@@ -120,6 +120,10 @@ elif MODEL_NAME == "resnet50":
     model = resnet50(num_classes=100)
 elif MODEL_NAME == "lambda_resnet50":
     model = lambda_resnet50(num_classes=100)
+elif MODEL_NAME == "lambda_resnet26":
+    model = lambda_resnet26(num_classes=100)
+elif MODEL_NAME == "lambda_resnet38":
+    model = lambda_resnet38(num_classes=100)
 else:
     print("Please correct the model name")
     exit(1)
