@@ -83,7 +83,10 @@ python train.py <resnet_model_name> <num_epochs_to_train> <seed> <model_dump_loc
 
 ```
 
+### Running the notebooks
 
-
+```
+jupyter nbconvert --execute <notebookname.ipynb>
+```
 
 
