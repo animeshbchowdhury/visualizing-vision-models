@@ -62,12 +62,12 @@ We list down the packages which we used on our side for experimentations.
 	│   └── ViT_ImageNet_RANDOM.ipynb
 	├── README.md
 	└── utilities
-	    ├── lambda_layer.py                          # The file contains the definition of lambda layers for lambda resnets
-	    ├── lambda_resnet.py			 # Utility file defining lambda network architecture
-	    ├── metrics.py				 # Utility script computing Gaussian-CKA and RBF-CKA
-	    ├── resnet.py				 # Utility script containing ResNet model architecture
-	    ├── train.py                                 # Training script for CIFAR-100
-	    └── utils.py                                 # Helper functions utility script for hooking,training and validation and CKA score computation
+	    ├── lambda_layer.py         # The file contains the definition of lambda layers for lambda resnets
+	    ├── lambda_resnet.py	# Utility file defining lambda network architecture
+	    ├── metrics.py		# Utility script computing Gaussian-CKA and RBF-CKA
+	    ├── resnet.py		# Utility script containing ResNet model architecture
+	    ├── train.py                # Training script for CIFAR-100
+	    └── utils.py                # Helper functions utility script for hooking,training and validation and CKA score computation
 
 1. In ```notebooks``` directory, we have kept all the notebooks which were used to generate the visualization. The files having **random** as suffix denotes that the visualization for the model was generated with randomly initialized weights. Notebooks having **pretrained** suffix have visualizations with models trained on relevant dataset. One just needs to run the notebooks and get the results.
 
