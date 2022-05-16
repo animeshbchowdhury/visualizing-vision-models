@@ -52,6 +52,9 @@ def accuracy(output, target, topk=(1,)):
     return res
 
 def evaluate(model,device,dataloader,hookLayerList,hookLayersActivationDict):
+    """
+    Evaluate the model using validation data and collect the activation data from each layers
+    """
     top1 = AverageMeter()
     # switch to evaluate mode
     model.eval()
@@ -78,6 +81,9 @@ def evaluate(model,device,dataloader,hookLayerList,hookLayersActivationDict):
     return top1.avg,activationDict
 
 def getLayerWiseOutputCorrelation(hookLayersM1,hookLayersM2,activationDictM1,activationDictM2):
+    """
+    Compute CKA scores for every pair of layers from its corresponding activation data
+    """
     col1 = []
     col2 = []
     hsicScoreList = []

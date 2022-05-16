@@ -4,6 +4,9 @@ import torch.nn as nn
 
 class LambdaLayer(nn.Module):
     # def __init__(self, d, dk=16, du=1, Nh=4, m=None, r=23, stride=1):
+    """
+    Defining Lambda layers, I. Bello et al. (ICLR 2021)
+    """
     def __init__(self, d, dk=16, du=1, Nh=4, m=None, r=23, stride=1):
         super(LambdaLayer, self).__init__()
         self.d = d
