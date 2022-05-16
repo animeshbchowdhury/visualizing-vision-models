@@ -3,9 +3,18 @@
 [![Version](https://img.shields.io/badge/Version-1.0.0-brightgreen)](https://github.com/animeshbchowdhury/visualizing-vision-models) 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
+README to be completed soon..
+
 ## Overview
 
+Visualizing CNNs
+![](https://github.com/animeshbchowdhury/visualizing-vision-models/blob/main/images/resnet.jpg)
 
+Visualizing Lambda networks
+![](https://github.com/animeshbchowdhury/visualizing-vision-models/blob/main/images/lambda.jpg)
+
+Visualizing ViTs
+![](https://github.com/animeshbchowdhury/visualizing-vision-models/blob/main/images/vit.jpg)
 ## Installing dependencies
 
 We recommend using [Anaconda](https://www.anaconda.com/) environment to install pre-requisites packages for running our framework and models.
