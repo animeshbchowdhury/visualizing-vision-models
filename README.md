@@ -28,33 +28,33 @@ We list down the packages which we used on our side for experimentations.
 
 ### Dataset directory structure
 
-├── images
-│   ├── lambda.jpg
-│   ├── resnet.jpg
-│   └── vit.jpg
-├── LICENSE
-├── notebooks
-│   ├── Lambda_R26_CIFAR100_PRETRAINED.ipynb
-│   ├── Lambda_R26_CIFAR100_RANDOM.ipynb
-│   ├── Lambda_R38_CIFAR100_PRETRAINED.ipynb
-│   ├── Lambda_R50_CIFAR100_PRETRAINED.ipynb
-│   ├── Lambda_R50_CIFAR100_RANDOM.ipynb
-│   ├── R101_CIFAR100.ipynb
-│   ├── R18_CIFAR100_PRETRAINED.ipynb
-│   ├── R18_CIFAR100_RANDOM.ipynb
-│   ├── R34_CIFAR100_PRETRAINED.ipynb
-│   ├── R34_CIFAR100_RANDOM.ipynb
-│   ├── R50_CIFAR100_PRETRAINED.ipynb
-│   ├── R50_CIFAR100_RANDOM.ipynb
-│   ├── ViT_ImageNet_PRETRAINED.ipynb
-│   └── ViT_ImageNet_RANDOM.ipynb
-├── README.md
-└── utilities
-    ├── lambda_layer.py
-    ├── lambda_resnet.py
-    ├── metrics.py
-    ├── resnet.py
-    ├── train.py
-    └── utils.py
+	├── images
+	│   ├── lambda.jpg
+	│   ├── resnet.jpg
+	│   └── vit.jpg
+	├── LICENSE
+	├── notebooks
+	│   ├── Lambda_R26_CIFAR100_PRETRAINED.ipynb
+	│   ├── Lambda_R26_CIFAR100_RANDOM.ipynb
+	│   ├── Lambda_R38_CIFAR100_PRETRAINED.ipynb
+	│   ├── Lambda_R50_CIFAR100_PRETRAINED.ipynb
+	│   ├── Lambda_R50_CIFAR100_RANDOM.ipynb
+	│   ├── R101_CIFAR100.ipynb
+	│   ├── R18_CIFAR100_PRETRAINED.ipynb
+	│   ├── R18_CIFAR100_RANDOM.ipynb
+	│   ├── R34_CIFAR100_PRETRAINED.ipynb
+	│   ├── R34_CIFAR100_RANDOM.ipynb
+	│   ├── R50_CIFAR100_PRETRAINED.ipynb
+	│   ├── R50_CIFAR100_RANDOM.ipynb
+	│   ├── ViT_ImageNet_PRETRAINED.ipynb
+	│   └── ViT_ImageNet_RANDOM.ipynb
+	├── README.md
+	└── utilities
+	    ├── lambda_layer.py
+	    ├── lambda_resnet.py
+	    ├── metrics.py
+	    ├── resnet.py
+	    ├── train.py
+	    └── utils.py
 
 
