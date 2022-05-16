@@ -2,15 +2,44 @@ import torch
 import torch.nn as nn
 
 def pairwise_distances(x):
+    """
+    Computes euclidean distance
+    Args:
+        x (vector): n-dimensional vector
+    Returns:
+        floating scaler : Euclidean distance
+    """
     #x should be two dimensional
     instances_norm = torch.sum(x**2,-1).reshape((-1,1))
     return -2*torch.mm(x,x.t()) + instances_norm + instances_norm.t()
 
 def GaussianKernelMatrix(x, sigma=0.9):
+    """
+    Computes Gaussian Kernel Matrix
+    Args:
+        x (array of floats): Takes the vector X.
+        sigma (float, optional): The standard deviation of the Gram matrix Defaults to 0.9.
+
+    Returns:
+        _type_: Computes Gram matrix using Gaussian kernel
+    """
     pairwise_distances_ = pairwise_distances(x)
     return torch.exp(-pairwise_distances_ /sigma)
 
 def HSIC(x, y, s_x=1, s_y=1):
+    """
+    Computes HSIC
+    Parameters
+    ----------
+    x : float
+        Batch of vectors
+    y : float
+        Batch of vectors
+    s_x : float
+        the kernel size of the kernel function for X.
+    s_y : float
+        the kernel size of the kernel function for Y.
+    """
     m,_ = x.shape #batch size
     #m = x.shape #batch size
     K = GaussianKernelMatrix(x,s_x)

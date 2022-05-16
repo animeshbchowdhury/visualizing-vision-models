@@ -26,6 +26,17 @@ TEST_BATCH_SIZE = 256
 NUM_WORKERS = 4
 
 def train(model,device,dataloader,optimizer):
+    """
+    Training utility
+    Args:
+        model : The network model
+        device : The device type to run the computation
+        dataloader (_type_): the training dataloader
+        optimizer (_type_): optimizer to use for computation and loss calculation
+
+    Returns:
+        loss and top-1 accuracy
+    """
     model.train()
     losses = AverageMeter()
     top1 = AverageMeter()
@@ -53,6 +64,16 @@ def train(model,device,dataloader,optimizer):
 
 
 def validate(model,device,dataloader):
+    """
+    Validation utility: Evaluate the model on validation data
+    Args:
+        model (_type_): Network model
+        device (_type_): CPU/GPU type
+        dataloader (_type_): Validation dataloader
+
+    Returns:
+        loss and top-1 accuracy
+    """
     losses = AverageMeter()
     top1 = AverageMeter()
     # switch to evaluate mode
@@ -79,7 +100,7 @@ def validate(model,device,dataloader):
     return losses.avg,top1.avg
 
 
-
+### Setting the SEED value for various RANDOMIZERs.
 torch.manual_seed(SEED)
 np.random.seed(SEED)
 if torch.cuda.is_available():
@@ -87,6 +108,8 @@ if torch.cuda.is_available():
     torch.cuda.manual_seed_all(SEED)
 criterion = nn.CrossEntropyLoss()
 
+
+## Transform functions for normalization on CIFAR-100
 normalize = transforms.Normalize(mean=[0.5071, 0.4867, 0.4408],
                                      std=[0.2675, 0.2565, 0.2761])
 
@@ -112,6 +135,8 @@ val_loader = torch.utils.data.DataLoader(
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+## Defining the model based on user parameter
+
 if MODEL_NAME == "resnet18":
     model = resnet18(num_classes=100)
 elif MODEL_NAME == "resnet34":
@@ -127,7 +152,7 @@ elif MODEL_NAME == "lambda_resnet38":
 else:
     print("Please correct the model name")
     exit(1)
-    
+  
 model = model.to(device)
 NUM_EPOCHS = EPOCHS
 
@@ -135,6 +160,8 @@ NUM_EPOCHS = EPOCHS
 optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9,weight_decay=5e-4)
 cosine_lr_scheduler = lr_scheduler.CosineAnnealingLR(optimizer,T_max=NUM_EPOCHS)
 
+
+## Training the model
 for ep in range(NUM_EPOCHS):
     train_loss,train_acc = train(model,device,train_loader,optimizer)
     valid_loss,valid_acc = validate(model,device,val_loader)
@@ -143,6 +170,5 @@ for ep in range(NUM_EPOCHS):
         print("Train loss:{}, Validation loss:{}".format(train_loss,valid_loss))
         print("Train acc:{}, Validation acc:{}".format(train_acc,valid_acc))
         
-        
+## Saving the model for evaluation        
 torch.save(model.state_dict(), MODEL_DUMP_PATH)
-#print(model)
