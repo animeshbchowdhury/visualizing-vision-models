@@ -2,7 +2,8 @@
 
 [![Version](https://img.shields.io/badge/Version-1.0.0-brightgreen)](https://github.com/animeshbchowdhury/visualizing-vision-models) 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
-
+[![Github Repo stars](https://img.shields.io/github/stars/animeshbchowdhury/visualizing-vision-models?style=social)]()
+[![Github forks](https://img.shields.io/github/forks/animeshbchowdhury/visualizing-vision-models?style=social)]()
 
 
 ## Overview
@@ -71,6 +72,18 @@ We list down the packages which we used on our side for experimentations.
 1. In ```notebooks``` directory, we have kept all the notebooks which were used to generate the visualization. The files having **random** as suffix denotes that the visualization for the model was generated with randomly initialized weights. Notebooks having **pretrained** suffix have visualizations with models trained on relevant dataset. One just needs to run the notebooks and get the results.
 
 2. In ```utilities``` directory, we have kept various python utilities having model architecture design, metrics, training scripts and helper functions required for training and validation.
+
+## Reproducing results
+
+### Training the models
+
+Run the following command for training the models
+```
+python train.py <resnet_model_name> <num_epochs_to_train> <seed> <model_dump_location>
+
+```
+
+
 
 
 
